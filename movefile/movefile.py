@@ -9,36 +9,37 @@
 import os
 import time
 
-# 遍历目录
+#生成器
 def file_paths(dir_path):
-    """遍历整个目录,并对目录下的文件进行操作
+    """生成器-查找目录下的文件
     """
     list_dirs = os.listdir(dir_path) # 获取给定目录下的文件及文件夹
-    for dir in list_dirs:
-        dir = os.path.realpath(dir_path + '/' + dir)
-        if os.path.isfile(dir):
-            move_file(dir)
+    for  f in list_dirs:
+        f = os.path.realpath(dir_path + '/' + f)
+        if os.path.isfile(f):
+            yield f
 
 def move_file(file_path):
     """移动文件到相应的日期目录下
     """
-    date_time  = time.strftime('%Y/%m',time.localtime(
+    if os.path.isdir(file_path):
+        for f in file_paths(file_path):
+            move_file(f)
+    elif  os.path.isfile(file_path):
+        date_time  = time.strftime('%Y/%m',time.localtime(
                  os.path.getctime(file_path)  # 文件创建时间
                  ))
-    basename = os.path.basename(file_path)
-    dirpath = os.path.realpath(os.path.dirname(file_path) + '/' + date_time)
-    new_filepath = os.path.realpath(dirpath+'/'+basename)
-    #if not os.path.exists(dirpath):
+        basename = os.path.basename(file_path)
+        dirpath = os.path.realpath(os.path.dirname(file_path) + '/' + date_time)
+        new_filepath = os.path.realpath(dirpath+'/'+basename)
+        #if not os.path.exists(dirpath):
         #os.makedirs(dirpath)
-    #os.system(' move "%s" "%s" ' % (file_path, new_filepath))
-    os.renames(file_path, new_filepath)
+        #os.system(' move "%s" "%s" ' % (file_path, new_filepath))
+        os.renames(file_path, new_filepath)
 
 def main():
     filepath = raw_input("please input the file or dir path:")
-    if os.path.isfile(filepath):
-        move_file(filepath)
-    if os.path.isdir(filepath):
-        file_paths(filepath)
+    move_file(filepath)
 
 if __name__ == '__main__':
     main()
