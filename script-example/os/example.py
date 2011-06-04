@@ -49,3 +49,21 @@ if not os.path.exists(save_path):
     os.makedirs(save_path)   # os.mkdir(path) 不能创建多层目录，类似：a/b
 
 os.renames(old, new) # 能创建多层目录，类似于移动并重命名文件的功能
+
+
+os.walk  # 用来遍历目录
+
+>>> for root, dir, file in os.walk('./'):
+...     print file  # root： 目录路径，dir: 目录下的文件夹 ， file:目录下的文件
+...
+['movefile.py', 'sss']
+['sss']
+
+os.walk(top,topdown=False) # 先分析子目录
+ 
+>>> for root, dir, file in os.walk('./'):
+...     print file
+...     dir[:] = []  # 只输出当前目录
+...
+['movefile.py', 'sss']
+
