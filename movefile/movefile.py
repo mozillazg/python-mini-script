@@ -9,21 +9,14 @@
 import os
 import time
 
-#生成器
-def file_paths(dir_path):
-    """生成器-查找目录下的文件
-    """
-    for root, dirs, files in os.walk(dir_path):
-        dirs[:] = [] # 忽略子目录
-        for f in files:
-            yield os.path.join(root, f)
-
 def move_file(file_path):
     """移动文件到相应的日期目录下
     """
     if os.path.isdir(file_path):
-        for f in file_paths(file_path):
-            move_file(f)
+        for root, dirs, files in os.walk(file_path):
+            dirs[:] = [] # 忽略子目录
+            for f in files:
+                move_file(os.path.join(root, f))
     elif  os.path.isfile(file_path):
         date_time  = time.strftime('%Y/%m',time.localtime(
                  os.path.getmtime(file_path)  # 文件最后修改时间
