@@ -67,3 +67,6 @@ os.walk(top,topdown=False) # 先分析子目录
 ...
 ['movefile.py', 'sss']
 
+
+os.sep  # 根据操作系统的不同，返回路径连接符: '/'(linux) 或 '\\'(windows) 
+'a' + os.sep + 'b' # a/b(linux)   a\\b(windows)
