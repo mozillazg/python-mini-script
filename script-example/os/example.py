@@ -70,3 +70,9 @@ os.walk(top,topdown=False) # 先分析子目录
 
 os.sep  # 根据操作系统的不同，返回路径连接符: '/'(linux) 或 '\\'(windows) 
 'a' + os.sep + 'b' # a/b(linux)   a\\b(windows)
+
+os.path.splitext
+>>> os.path.splitext('d:\download\wcx_Total7zip_0850.rar')
+('d:\\download\\wcx_Total7zip_0850', '.rar')
+
+os.path.abspath # 返回格式化后的绝对路径  os.path.realpath 忽略了软链接
