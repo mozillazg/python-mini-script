@@ -12,8 +12,8 @@ def new_dict(dict1, dict2):
     newdict.update(dict1)
     newdict.update(dict2)
     d = newdict.copy()
-    for i in d.iterkeys():
-        if dict1.has_key(i) and dict2.has_key(i):
+    for i in d:
+        if i in dict1 and i in dict2:
             newdict.pop(i)
     return newdict
 
