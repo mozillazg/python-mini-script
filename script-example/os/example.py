@@ -76,3 +76,10 @@ os.path.splitext
 ('d:\\download\\wcx_Total7zip_0850', '.rar')
 
 os.path.abspath # 返回格式化后的绝对路径  os.path.realpath 忽略了软链接
+
+os.path.splitext(path) # 返回文件名路径及扩展名
+>>> os.path.splitext(r'E:\Workspaces\Python\updatefilename\readme.md')
+('E:\\Workspaces\\Python\\updatefilename\\readme', '.md')
+>>> os.path.splitext(r'E:\Workspaces\Python\updatefilename\test')
+('E:\\Workspaces\\Python\\updatefilename\\test, '')
+
