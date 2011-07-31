@@ -9,11 +9,13 @@ import urllib2
 """
 
 def get_id(keyword, debug=False):
+    """keyword 必须为 UTF-8 编码
+    """
     query = urllib.urlencode({
             'callback': 'jsonp1308665312716',
             '_': '1308665332660',
             'language': 'zh',
-            'keyword': str(keyword).decode('gbk').encode('utf8')
+            'keyword': keyword
             })
     url = 'http://toy.weather.com.cn/SearchBox/searchBox?%s' % query
     data = urllib2.urlopen(url).read()
@@ -37,6 +39,8 @@ def get_id(keyword, debug=False):
 
 def main():
     keyword = raw_input('input(输入城市名、全拼、简拼、电话区号、邮编查询):').strip()
+    keyword = keyword.decode('gbk').encode('utf8')
+    print repr(keyword)
     name, id = get_id(keyword, debug=True)
 
 if __name__ == '__main__':
