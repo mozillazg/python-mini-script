@@ -11,6 +11,7 @@ import urllib2
 
 #TODO 根据 get_id.py 取得的城市id，
 # 直接获取中国天气网(http://weather.com.cn/)的天气数据
+# cache
 
 def weather(cityname):
     """cityname 必须为 utf8 编码
@@ -41,3 +42,4 @@ if __name__ == '__main__':
                 weathers[a] = weathers[a] + '\n'
     print ''.join(city_info)
     print ''.join(weathers)
+    raw_input('')
