@@ -11,7 +11,7 @@ from BeautifulSoup import BeautifulSoup, SoupStrainer
 
 def get(word, headers=None, lang='US'):
     """获取音频文件链接
-    >> get_audio('receipt',lang='US')
+    >>> get('receipt')
     http://res.iciba.com/resource/amp3/1/0/1e/11/1e11b989ba2f5e161cdad604bf3de90b.mp3
     """
     # 设置 header
@@ -19,8 +19,6 @@ def get(word, headers=None, lang='US'):
                   + 'Gecko/20100101 Firefox/9.0')
     if headers is None:
         headers = {'User-Agent' : user_agent}
-    else:
-        headers = headers
     url ='http://www.iciba.com/%s/' % urllib2.quote(word)
     # 读取网页内容
     request = urllib2.Request(url=url, headers=headers)
@@ -36,7 +34,7 @@ def get(word, headers=None, lang='US'):
             audios = [str(tag) for tag in BeautifulSoup(html, parseOnlyThese=links)]
             soup = BeautifulSoup(''.join(audios))
             audios = soup.findAll('a')
-        #    print audios
+            # print audios
             if 'US' in lang.upper() and len(audios) > 1: # 'US'
                 audio = audios[1]['onclick'].split("'")[1]
             else: # 'UK'
@@ -67,6 +65,7 @@ def save(url, word, headers=None, savedir=''):
             starts = 'abcdefghijklmnopqrstuvwxyz'
             if not savedir:
                 savedir = '.'
+            # 将文件保存到单词开头字母的文件夹中
             for i in starts:
                 if word.startswith(i):
                     savedir = savedir + os.sep + i
@@ -77,10 +76,10 @@ def save(url, word, headers=None, savedir=''):
                 os.makedirs(savedir)
             # 保存后的文件路径
             file_name = savedir + os.sep + word +'.mp3'
-        #    print file_name
+            # print file_name
             # 如果文件名已存在
             if os.path.exists(file_name):
-                print u'The same name file has been existed!'
+                print u'同名文件已存在！'
             else:
                 with open(file_name,'wb') as output:
                     # 写入数据，即保存文件
@@ -89,8 +88,7 @@ def save(url, word, headers=None, savedir=''):
 def main():
     import doctest
     import audio
-    doctest.testmod(audio)
-    # dir =
+    doctest.testmod(audio) # 基于文档字符串的测试
     while True:
         word = raw_input("> ").strip()
         save(get(word, lang='uk'), word, savedir='audio')
