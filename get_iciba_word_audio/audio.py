@@ -84,14 +84,16 @@ def save(url, word, headers=None, savedir=''):
                 with open(file_name,'wb') as output:
                     # 写入数据，即保存文件
                     output.write(file_data)
+                return file_name
 
 def main():
-    import doctest
-    import audio
-    doctest.testmod(audio) # 基于文档字符串的测试
+    # import doctest
+    # import audio
+    # doctest.testmod(audio) # 基于文档字符串的测试
     while True:
         word = raw_input("> ").strip()
-        save(get(word, lang='uk'), word, savedir='audio')
+        if not word: break
+        print save(get(word, lang='uk'), word, savedir='audio')
 
 if __name__ == '__main__':
     main()
