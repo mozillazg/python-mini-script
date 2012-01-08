@@ -4,6 +4,12 @@
 """从爱词霸下载单词读音音频文件
 """
 
+import sys
+
+if sys.getdefaultencoding() != 'utf-8':
+    reload(sys)
+    sys.setdefaultencoding('utf-8')
+
 import urllib2
 import re
 import os
@@ -43,7 +49,24 @@ def get(word, headers=None, lang='US'):
         else:
             return None
 
-def save(url, word, headers=None, savedir=''):
+def path(word, savedir='audio', ext='.mp3'):
+    """文件路径
+    """
+    starts = 'abcdefghijklmnopqrstuvwxyz'
+    # 将文件保存到单词开头字母的文件夹中
+    for i in starts:
+        if word.startswith(i):
+            savedir = savedir + os.sep + i
+            break
+    else:
+        savedir = savedir + os.sep + '0-9'
+    if not os.path.exists(savedir):
+        os.makedirs(savedir)
+    # 文件路径
+    file_path = savedir + os.sep + word + ext
+    return file_path
+
+def save(url, file_path, headers=None):
     """保存音频文件
     """
     if url is None:
@@ -61,30 +84,12 @@ def save(url, word, headers=None, savedir=''):
             file_data = urllib2.urlopen(request).read()
         except:
             print u'网络故障！'
+            return None
         else:
-            starts = 'abcdefghijklmnopqrstuvwxyz'
-            if not savedir:
-                savedir = '.'
-            # 将文件保存到单词开头字母的文件夹中
-            for i in starts:
-                if word.startswith(i):
-                    savedir = savedir + os.sep + i
-                    break
-            else:
-                savedir = savedir + os.sep + '0-9'
-            if not os.path.exists(savedir):
-                os.makedirs(savedir)
-            # 保存后的文件路径
-            file_name = savedir + os.sep + word +'.mp3'
-            # print file_name
-            # 如果文件名已存在
-            if os.path.exists(file_name):
-                print u'同名文件已存在！'
-            else:
-                with open(file_name,'wb') as output:
-                    # 写入数据，即保存文件
-                    output.write(file_data)
-                return file_name
+            with open(file_path,'wb') as output:
+                # 写入数据，即保存文件
+                output.write(file_data)
+            return file_path
 
 def main():
     # import doctest
@@ -93,7 +98,21 @@ def main():
     while True:
         word = raw_input("> ").strip()
         if not word: break
-        print save(get(word, lang='uk'), word, savedir='audio')
+        file_path = path(word)
+        # 如果文件已存在
+        if os.path.exists(file_path):
+            answer = raw_input(u'文件已存在！是否覆盖(y/n):')
+            if answer.strip().lower().startswith('y'):
+                if save(get(word), file_path):
+                    print u'文件已成功下载！'
+                    print os.path.realpath(file_path)
+            else:
+                print u'文件未覆盖！'
+                print os.path.realpath(file_path)
+        else:
+            if save(get(word), file_path):
+                print u'文件已成功下载！'
+                print os.path.realpath(file_path)
 
 if __name__ == '__main__':
     main()
